@@ -1,0 +1,2 @@
+python ./mp_cal.py AOOP.input files/NEAm20150208.txt files/AOOP_Eph.txt files/AOOP_LongLat.txt
+python ./mp_mysql_load.py

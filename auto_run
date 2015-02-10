@@ -1,0 +1,6 @@
+vi /etc/rc.local
+
+service mysqld start
+cd /home/catauser
+./socket_start
+

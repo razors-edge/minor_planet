@@ -1,0 +1,4 @@
+user = root
+ip = localhost
+mypassword = rootadmin
+socket_port = 60000
