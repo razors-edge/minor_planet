@@ -1,6 +1,5 @@
-56900   57000   1.0
-files/NEAm20140831.txt
- 117.2     40.5      1000.0
- files/AOOP_Eph.txt
-  files/AOOP_LongLat.txt
- 
+57066  57071  1
+/home/catauser/PythonWorkspace/minor_planet/files/NEAm20150208.txt
+117.575     40.393      950.0
+/home/catauser/PythonWorkspace/minor_planet/files/AOOP_Eph.txt
+/home/catauser/PythonWorkspace/minor_planet/files/AOOP_LongLat.txt

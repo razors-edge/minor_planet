@@ -1,1 +1,2 @@
-20 15 * * * ./mp_cal_auto
+39 18 * * * /home/catauser/PythonWorkspace/minor_planet/mp_cal_auto
+39 18 * * * /home/catauser/PythonWorkspace/minor_planet/a

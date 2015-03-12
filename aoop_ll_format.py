@@ -68,7 +68,7 @@ def aoop_ll_format(inputfile,outputfileroot):
         h = open(outputfile,'w')
         for j in range(line_num/ind_num):
             h.write("%i %s %s %s %s %s %s\n" % 
-            (j,name[(j*ind_num)+i],mjd[(j*ind_num)+i],lon[(j*ind_num)+i],
+            (j+1,name[(j*ind_num)+i],mjd[(j*ind_num)+i],lon[(j*ind_num)+i],
             lat[(j*ind_num)+i],dlon[(j*ind_num)+i],dlat[(j*ind_num)+i]))             
         h.close()    
     e.close()

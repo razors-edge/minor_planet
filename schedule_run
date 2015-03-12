@@ -1,1 +1,2 @@
-crontab crondFile
+#crontab /home/catauser/PythonWorkspace/minor_planet/crondFile
+python /home/catauser/PythonWorkspace/minor_planet/schedule_test1.py

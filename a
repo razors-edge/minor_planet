@@ -1,0 +1,1 @@
+ls /home/catauser/PythonWorkspace/minor_planet/files/* > /home/catauser/PythonWorkspace/minor_planet/test

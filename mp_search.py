@@ -18,6 +18,7 @@ import time
 from angular_distance import angular_distance
 import re
 from jdcal import gcal2jd
+from jdcal import jd2gcal
 from jdcal import MJD_0
 t0 = datetime.datetime.now()
 
@@ -87,30 +88,52 @@ def search_box(racen, deccen, side_length):
 
 if __name__ == '__main__':
 #    print sys.argv  
-    z=0
+    aef = 0
 if not sys.argv[1:]:
-    sys.argv += ["77.0","41.0","2014/10/29,15:21:30","200.0",'./mp.txt']
-
-racen = sys.argv[1]
-deccen = sys.argv[2]
+    sys.argv += ["77.0","41.0","2014/10/29T15:21:30","200.0",'./mp.txt']
+#    print "ra  dec  yyyy/mm/dd,hh:mm:ss radius(arcmin) outputfile"
+#    sys.exit()
+ra = sys.argv[1]
+dec = sys.argv[2]
 search_daytime = sys.argv[3]
 radius_m = sys.argv[4]
 outputfile = sys.argv[5]
 
-search_date = search_daytime.split(",")[0]
-search_time = search_daytime.split(",")[1]
+if ra.count(':') > 0 and dec.count(':') > 0 :
+    rahms = ra
+    decdms = dec
+    radeg = float(rahms.split(":")[0])/24.0*360.0+float(rahms.split(":")[1])/60.0*15.0+float(rahms.split(":")[2])/3600.0*15.0
+    decdeg = float(decdms.split(":")[0])+float(decdms.split(":")[1])/60.0+float(decdms.split(":")[2])/3600.0
+    print rahms, decdms, radeg, decdeg
+else:
+    radeg = float(ra)
+    decdeg = float(dec)
+    ra_h = int(radeg/15.0)
+    ra_m = int((radeg/15.0 - ra_h)*60.0)
+    ra_s = (((radeg/15.0 - ra_h)*60.0) - ra_m)*60.0
+    rahms = "%02d:%02d:%0.1f" % (ra_h,ra_m,ra_s)
+    dec_d = int(decdeg)
+    dec_m = int((decdeg - dec_d)*60.0)
+    dec_s = (((decdeg - dec_d)*60.0) - dec_m)*60.0
+    decdms = "%02d:%02d:%0.1f" % (dec_d,dec_m,dec_s)
+    print rahms, decdms, radeg, decdeg
+
+search_date = search_daytime.split("T")[0]
+search_time = search_daytime.split("T")[1]
 gcal_y =  search_date.replace("-","/").split("/")[0]
 gcal_m =  search_date.replace("-","/").split("/")[1]
 gcal_d =  search_date.replace("-","/").split("/")[2]
 MJD_search_day = gcal2jd(gcal_y,gcal_m,gcal_d)[1]
 mjd_search_lable = str(int(MJD_search_day))
+calendar_d = jd2gcal(2400000.5, float(MJD_search_day))
+calendar_d_lable = ("%d%02d%02d" % (calendar_d[0],calendar_d[1],calendar_d[2]))
 gcal_h =  search_time.replace(":","/").split("/")[0]
 gcal_min =  search_time.replace(":","/").split("/")[1]
 if len(search_time.replace(":","/").split("/")) == 3:
     gcal_s =  search_time.replace(":","/").split("/")[2]
 mjd_search_t = (float(gcal_h) + (float(gcal_min)/60.) + (float(gcal_s)/3600.) ) / 24.0
 
-CurrentTable = ('aoop_longlat_%0s'% mjd_search_lable)
+CurrentTable = ('aoop_longlat_%0s'% calendar_d_lable)
 print "search MP from table: ",CurrentTable
 
 g = open(outputfile,'w')
@@ -160,7 +183,7 @@ max_dang_dis = ang_dis = angular_distance(0, 0,max_dlon,max_dlat)
 print max_dlon,max_dlat,max_dang_dis
 
 side_length = (float(radius_m)/60.0)
-box_parameter = search_box(racen, deccen, side_length)
+box_parameter = search_box(radeg, decdeg, side_length)
 
 ra_small = box_parameter[1] - abs(max_dlon)
 ra_large = box_parameter[2] + abs(max_dlon)
@@ -188,7 +211,7 @@ if len(match_result1) > 0:
         mp_dra_result = match_result1[k][4]
         mp_ddec_result = match_result1[k][5]
 #        print match_result1[k][2],match_result1[k][3],mp_ra_result,mp_dec_result
-        ang_dis_cen2mp_result = angular_distance(float(racen), float(deccen),mp_ra_result,mp_dec_result)
+        ang_dis_cen2mp_result = angular_distance(float(radeg), float(decdeg),mp_ra_result,mp_dec_result)
 #        print("%s   %10.7f %10.7f  %10.7f" % (match_result1[k][0],mp_ra_result,mp_dec_result,ang_dis_cen2mp_result))
         if (ang_dis_cen2mp_result < side_length):
             print("%s   %10.7f %10.7f  %0.2f %s %s" % (match_result1[k][0],match_result1[k][1],match_result1[k][2],match_result1[k][3],match_result1[k][4],match_result1[k][5]))

@@ -32,9 +32,9 @@ def is_number(s):
 def aoop_input(inputfile,databasefile,output_eph,output_ll):        
     now = datetime.datetime.now()
     h = open(inputfile,'w')
-    step_d = 5
+    step_d = 6
     day_start = now
-    day_end  = now + timedelta(days=5)
+    day_end  = now + timedelta(days=step_d)
     
     gcal_y = "%i" % day_start.year
     gcal_m = "%i" % day_start.month
@@ -57,9 +57,9 @@ def aoop_input(inputfile,databasefile,output_eph,output_ll):
     h.write("%s\n" % output_ll)
     h.close()
 
-def run_exe_script(script_file_path,script_file_name):    
+def run_exe_script(script_file_path,script_file_name,script_inputfile):    
     import subprocess    
-    file_name = script_file_path+script_file_name
+    file_name = script_file_path+"/"+script_file_name+" "+script_inputfile
 #    print file_name              
     subp1 = subprocess.Popen(file_name,
                             stderr = subprocess.PIPE, stdout = subprocess.PIPE, shell = True)
@@ -75,12 +75,24 @@ def on_rm_error( func, path, exc_info):
     os.chmod( path, stat.S_IWRITE )
     os.unlink( path )
 
+def cur_file_dir():
+    #获取脚本路径
+    path = sys.path[0]
+    #判断为脚本文件还是py2exe编译后的文件，如果是脚本文件，则返回的是脚本的目录，
+    #如果是py2exe编译后的文件，则返回的是编译后的文件路径
+    if os.path.isdir(path):
+        return path
+    elif os.path.isfile(path):
+        return os.path.dirname(path)
+#打印结果
+homedir =  cur_file_dir()
+
 
 if __name__ == '__main__':
 #    print sys.argv  
     z=0
 if not sys.argv[1:]:
-    sys.argv += ["AOOP.input", "files/NEA_20141029.txt","files/AOOP_Eph.txt" ,"files/AOOP_LongLat.txt"]
+    sys.argv += ["AOOP.input", "files/NEAm20150208.txt","files/AOOP_Eph.txt" ,"files/AOOP_LongLat.txt"]
 
 inputfile = sys.argv[1]
 databasefile = sys.argv[2]
@@ -90,15 +102,16 @@ output_ll = sys.argv[4]
 #databasefile = "files/NEA_20141025.txt"
 #output_eph = "files/AOOP_Eph.txt"
 #output_ll = "files/AOOP_LongLat.txt"
-
+#print 'input',inputfile, databasefile, output_eph, output_ll
 t0 = datetime.datetime.now()
 
 aoop_input(inputfile,databasefile,output_eph,output_ll)
 
-exepath = './'
+exepath = homedir
 exename = 'AOOP'
-output = run_exe_script(exepath,exename)
-print output
+#print exepath,exename,inputfile
+output = run_exe_script(exepath,exename,inputfile)
+#print output
 
 delta_t = datetime.datetime.now() - t0 
 print delta_t 

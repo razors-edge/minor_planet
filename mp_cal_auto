@@ -1,2 +1,10 @@
-python ./mp_cal.py AOOP.input files/NEAm20150208.txt files/AOOP_Eph.txt files/AOOP_LongLat.txt
-python ./mp_mysql_load.py
+this_dir="/home/catauser/PythonWorkspace/minor_planet/"
+str1="mp_cal.py"
+str2="AOOP.input"
+str3="files/NEAm20150208.txt"
+str4="files/AOOP_Eph.txt"
+str5="files/AOOP_LongLat.txt"
+str_all="$this_dir$str1 $this_dir$str2 $this_dir$str3 $this_dir$str4 $this_dir$str5"
+python $str_all
+#${dir}"AOOP.input" ${dir}"files/NEAm20150208.txt" ${dir}"files/AOOP_Eph.txt" ${dir}"files/AOOP_LongLat.txt"
+python ${this_dir}"mp_mysql_load.py"
